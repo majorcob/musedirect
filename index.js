@@ -28,9 +28,95 @@ class Muse extends EventEmitter {
 		})
 
 		// Emit generic message and OSC address events
-		this.udp.on("message", (message) => {
-			this.emit("message", message)
-			this.emit(message.address, message.args)
+		this.udp.on("message", (msg) => {
+			this.emit("message", msg)
+			this.emit(msg.address, msg.args)
+		})
+
+		// Raw EEG data is received
+		this.on("/eeg", (args) => {
+			let [tp9, af7, af8, tp10] = args
+			this.emit("eeg raw", tp9, af7, af8, tp10)
+		})
+
+		// Filtered EEG data is received
+		this.on("/notch_filtered_eeg", (args) => {
+			let [tp9, af7, af8, tp10] = args
+			this.emit("eeg filtered", tp9, af7, af8, tp10)
+		})
+
+		// EEG quantizer is received
+		this.on("/eeg/quantization", (args) => {
+			let [stepsize] = args
+			this.emit("eeg stepsize", stepsize)
+		})
+
+		// Accelerometer data is received
+		this.on("/acc", (args) => {
+			let [accelX, accelY, accelZ] = args
+			this.emit("accel data", accelX, accelY, accelZ)
+		})
+
+		// Gyroscope data is received
+		this.on("/gyro", (args) => {
+			let [rollRate, pitchRate, yawRate] = args
+			this.emit("gyro data", rollRate, pitchRate, yawRate)
+		})
+
+		// For each band:
+		["delta", "theta", "alpha", "beta", "gamma"].forEach((band) => {
+
+			// Absolute band power is received
+			this.on(`/elements/${band}_absolute`, (args) => {
+				let [tp9, af7, af8, tp10] = args
+				this.emit(`${band} abp`, tp9, af7, af8, tp10)
+			})
+
+			// Relative band power is received
+			this.on(`/elements/${band}_relative`, (args) => {
+				let [tp9, af7, af8, tp10] = args
+				this.emit(`${band} rbp`, tp9, af7, af8, tp10)
+			})
+
+			// Session score is received
+			this.on(`/elements/${band}_session_score`, (args) => {
+				let [tp9, af7, af8, tp10] = args
+				this.emit(`${band} score`, tp9, af7, af8, tp10)
+			})
+		})
+
+		// Forehead contact status is received
+		this.on("/elements/touching_forehead", (args) => {
+			let [isTouching] = args
+			this.emit("contact status", !!isTouching)
+		})
+
+		// Sensor statuses are received
+		this.on("/elements/is_good", (args) => {
+			let [leftEar, leftFront, rightFront, rightEar] = args
+			this.emit("channel status", !!leftEar, !!leftFront, !!rightFront, !!rightEar)
+		})
+
+		// Battery status is received
+		this.on("/batt", (args) => {
+			let [decimal, voltage, temperature] = args
+			this.emit("battery status", decimal / 10000, voltage, temperature)
+		})
+
+		// DRL reference voltages are received
+		this.on("/drlref", (args) => {
+			let [drl, ref] = args
+			this.emit("drl status", drl, ref)
+		})
+
+		// Blink presence is received
+		this.on("/elements/blink", (args) => {
+			if (args) this.emit("blink")
+		})
+
+		// Jaw clench presence is received
+		this.on("/elements/jaw_clench", (args) => {
+			if (args) this.emit("jaw clench")
 		})
 
 		this.udp.open()
