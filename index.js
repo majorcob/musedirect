@@ -111,12 +111,14 @@ class Muse extends EventEmitter {
 
 		// Blink presence is received
 		this.on("/elements/blink", (args) => {
-			if (args) this.emit("blink");
+			let [blinking] = args;
+			if (blinking) this.emit("blink");
 		});
 
 		// Jaw clench presence is received
 		this.on("/elements/jaw_clench", (args) => {
-			if (args) this.emit("jaw clench");
+			let [clenching] = args;
+			if (clenching) this.emit("jaw clench");
 		});
 
 		this.udp.open();
