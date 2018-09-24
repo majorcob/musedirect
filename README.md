@@ -17,7 +17,7 @@ const Muse = require("musedirect")
 // Create new instance listening at 127.0.0.1:7000
 let muse = new Muse("127.0.0.1", 7000)
 
-// Create event handlers; see list of events below
+// Create event listeners; see list of events below
 muse.on("open", () => {
 	// ...
 })
@@ -30,7 +30,19 @@ muse.start()
 
 ### `Muse` class
 
-TODO
+The `Muse` class extends `EventEmitter`. See [Node.js Events docs](https://nodejs.org/api/events.html#events_class_eventemitter) for inherited functionality.
+
+#### `new Muse(address="127.0.0.1", port=7000)`
+
+Constructor. In order to receive data, `.start()` must be called. `address` and `port` correspond to the UDP configuration in Muse Direct.
+
+#### `.start()`
+
+Begins listening for OSC messages on the UDP port specified in the constructor. This is synchronous and will block the thread until the connection is closed using `.stop()`. For this reason, make sure all of your event listeners are defined before starting.
+
+#### `.stop()`
+
+Closes the UDP port.
 
 ### Events
 
