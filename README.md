@@ -11,7 +11,19 @@ Provides an event-based interface to OSC data sent by [Muse Direct](https://www.
 ## Usage
 
 ```js
-// TODO
+// Import class
+const Muse = require("musedirect")
+
+// Create new instance listening at 127.0.0.1:7000
+let muse = new Muse("127.0.0.1", 7000)
+
+// Create event handlers; see list of events below
+muse.on("open", () => {
+	// ...
+})
+
+// Start listening
+muse.start()
 ```
 
 ## API
