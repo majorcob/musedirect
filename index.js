@@ -18,17 +18,39 @@ class Muse extends EventEmitter {
 			localPort: this.port
 		});
 
+		// Timeout duration, in ms
+		this.timeout = 250;
+
+		// Connected status tracker
+		this.connected = false;
+		this.lastMessage = Date.now();
+		this.connectInterval = null;
+
 	}
 
 	start() {
 
-		// Open connection
+		// Open connection and then start timer
 		this.udp.on("ready", () => {
 			this.emit("open");
+			this.connectInterval = setInterval(() => {
+
+				// Connected and timeout passed, then disconnect
+				if (this.connected && Date.now() - this.lastMessage > this.timeout) {
+					this.connected = false;
+					this.emit("disconnect");
+					return;
+				} else if (!this.connected && Date.now() - this.lastMessage <= this.timeout) {
+					this.connected = true;
+					this.emit("connect");
+				}
+
+			}, this.timeout);
 		});
 
-		// Emit generic message and OSC address events
+		// Emit generic message and OSC address events, and confirm connection
 		this.udp.on("message", (msg) => {
+			this.lastMessage = Date.now();
 			this.emit("message", msg);
 			this.emit(msg.address, msg.args);
 		});

@@ -50,6 +50,8 @@ Event            | Parameters                                       | Descriptio
 -----------------|--------------------------------------------------|------------
 `open`           | None                                             | UDP port is opened (but not necessarily connected to a Muse).
 `close`          | None                                             | UDP port is closed.
+`connect`        | None                                             | A Muse has connected and is sending data. Checked every 250 ms.
+`disconnect`     | None                                             | A Muse has lost connection and/or is no longer sending data. Checked every 250 ms.
 `message`        | `msg`                                            | Any OSC message is received. See [osc.js docs](https://github.com/colinbdclark/osc.js/#messages) for `msg` object structure.
 \[any OSC path\] | `args`                                           | A message with this OSC path is received. `args` is the OSC message arguments.
 `eeg raw`        | `tp9`, `af7`, `af8`, `tp10`                      | Raw EEG data is received. Arguments are μV values for each channel. See [Muse docs](http://developer.choosemuse.com/tools/windows-tools/available-data-muse-direct#Raw_EEG).
