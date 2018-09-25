@@ -151,6 +151,7 @@ class Muse extends EventEmitter {
 
 		// Close connection
 		this.udp.close();
+		clearInterval(this.connectInterval);
 		this.emit("close");
 
 	}
