@@ -5,7 +5,7 @@ Provides an event-based interface to OSC data sent by [Muse Direct](https://www.
 ## Installation
 
 ```sh
-# TODO
+npm install musedirect --save
 ```
 
 ## Usage
