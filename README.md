@@ -26,15 +26,23 @@ muse.on("open", () => {
 muse.start();
 ```
 
+### Note about OSC paths
+
+As of Muse Direct on Windows version 0.19.1, the default OSC output uses message addresses with the format `Person0/eeg/0`, where `Person0` is the name of the Muse device. **This will cause issues with osc.js**, as paths without a leading slash are not considered valid. There are two workarounds for this:
+
+1. Change the name of the device to begin with a leading slash (e.g. `Person0` → `/Person0`), then pass the string `"/Person0"` as the `prefix` parameter to the `Muse` class constructor.
+
+2. Disable the default OSC output and create a new one. Set the prefix to a custom text value, which will be the `prefix` string passed to the `Muse` class constructor. This can be en empty string as well, which is the default value for `prefix.` If the prefix is not empty, then it must begin with a slash such that the resulting OSC paths also have a leading slash.
+
 ## API
 
 ### `Muse` class
 
 The `Muse` class extends `EventEmitter`. See [Node.js Events docs](https://nodejs.org/api/events.html#events_class_eventemitter) for inherited functionality.
 
-#### `new Muse(address="127.0.0.1", port=7000)`
+#### `new Muse(address="127.0.0.1", port=7000, prefix="")`
 
-Constructor. In order to receive data, `.start()` must be called. `address` and `port` correspond to the UDP configuration in Muse Direct.
+Constructor. In order to receive data, `.start()` must be called. `address` and `port` correspond to the UDP configuration in Muse Direct. `prefix` is the name that may be added by Muse Direct before each OSC address (see the note above regarding OSC paths).
 
 #### `.start()`
 
@@ -52,8 +60,8 @@ Event            | Parameters                                       | Descriptio
 `close`          | None                                             | UDP port is closed.
 `connect`        | None                                             | A Muse has connected and is sending data. Checked every 250 ms.
 `disconnect`     | None                                             | A Muse has lost connection and/or is no longer sending data. Checked every 250 ms.
-`message`        | `msg`                                            | Any OSC message is received. See [osc.js docs](https://github.com/colinbdclark/osc.js/#messages) for `msg` object structure.
-\[any OSC path\] | `args`                                           | A message with this OSC path is received. `args` is the OSC message arguments.
+`message`        | `msg`                                            | Any OSC message is received. Any prefix specified in the `Muse` class constructor is kept in the address. See [osc.js docs](https://github.com/colinbdclark/osc.js/#messages) for `msg` object structure.
+\[any OSC path\] | `args`                                           | A message with this OSC path is received. Any prefix specified in the constructor is removed, leaving only the relevant OSC path. `args` is the OSC message arguments. See [Muse docs](http://developer.choosemuse.com/tools/windows-tools/available-data-muse-direct) for available OSC paths.
 `eeg raw`        | `tp9`, `af7`, `af8`, `tp10`                      | Raw EEG data is received. Arguments are μV values for each channel. See [Muse docs](http://developer.choosemuse.com/tools/windows-tools/available-data-muse-direct#Raw_EEG).
 `eeg filtered`   | `tp9`, `af7`, `af8`, `tp10`                      | EEG data put through a band-stop filter. Arguments are μV values for each channel. See [Muse docs](http://developer.choosemuse.com/tools/windows-tools/available-data-muse-direct#Notch_Filtered_EEG).
 `eeg stepsize`   | `stepsize`                                       | Quantization step size is received for Muse 2014 data compression. See [Muse docs](http://developer.choosemuse.com/tools/windows-tools/available-data-muse-direct#EEG_Quantization_Level).

@@ -5,7 +5,7 @@ const EventEmitter = require("events").EventEmitter;
 
 class Muse extends EventEmitter {
 
-	constructor(address="127.0.0.1", port=7000) {
+	constructor(address="127.0.0.1", port=7000, prefix="") {
 
 		// Built-in EventEmitter stuff
 		super();
@@ -13,6 +13,7 @@ class Muse extends EventEmitter {
 		// UDP connection info
 		this.address = address;
 		this.port = port;
+		this.prefix = prefix;
 		this.udp = new osc.UDPPort({
 			localAddress: this.address,
 			localPort: this.port
@@ -50,9 +51,11 @@ class Muse extends EventEmitter {
 
 		// Emit generic message and OSC address events, and confirm connection
 		this.udp.on("message", (msg) => {
-			this.lastMessage = Date.now();
-			this.emit("message", msg);
-			this.emit(msg.address, msg.args);
+			if (msg.address.startsWith(this.prefix + "/")) {
+				this.lastMessage = Date.now();
+				this.emit("message", msg);
+				this.emit(msg.address.substring(this.prefix.length), msg.args);
+			}
 		});
 
 		// Raw EEG data is received
