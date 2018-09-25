@@ -1,4 +1,4 @@
-# Muse Direct
+# Muse Direct  [![npm](https://img.shields.io/npm/v/musedirect.svg?style=flat-square)](https://npmjs.org/musedirect)
 
 Provides an event-based interface to OSC data sent by [Muse Direct](https://www.microsoft.com/en-us/p/muse-direct/9p0mbp6nv07x).
 
@@ -68,3 +68,7 @@ Event            | Parameters                                       | Descriptio
 `drl status`     | `drl`, `ref`                                     | DRL status is received. Arguments are the DRL and reference voltages in μV. See [Muse docs](http://developer.choosemuse.com/tools/windows-tools/available-data-muse-direct#DRLRefData).
 `blink`          | None                                             | A blink was detected. Note that the OSC behavior will always send a Boolean value at 10 Hz, but in this case the event is only fired if a blink is detected. See [Muse docs](http://developer.choosemuse.com/tools/windows-tools/available-data-muse-direct#Blinks).
 `jaw clench`     | None                                             | A jaw clench was detected. Note that the OSC behavior will always send a Boolean value at 10 Hz, but in this case the event is only fired if a jaw clench is detected. See [Muse docs](http://developer.choosemuse.com/tools/windows-tools/available-data-muse-direct#Jaw_Clenches).
+
+## License
+
+[MIT](https://opensource.org/licenses/MIT)
