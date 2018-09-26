@@ -27,6 +27,10 @@ class Muse extends EventEmitter {
 		this.lastMessage = Date.now();
 		this.connectInterval = null;
 
+		// Blink/jaw clench trackers to avoid duplicate events
+		this.blinked = false;
+		this.clenched = false;
+
 	}
 
 	start() {
@@ -40,7 +44,6 @@ class Muse extends EventEmitter {
 				if (this.connected && Date.now() - this.lastMessage > this.timeout) {
 					this.connected = false;
 					this.emit("disconnect");
-					return;
 				} else if (!this.connected && Date.now() - this.lastMessage <= this.timeout) {
 					this.connected = true;
 					this.emit("connect");
@@ -137,13 +140,23 @@ class Muse extends EventEmitter {
 		// Blink presence is received
 		this.on("/elements/blink", (args) => {
 			let [blinking] = args;
-			if (blinking) this.emit("blink");
+			if (blinking && !this.blinked) {
+				this.blinked = true;
+				this.emit("blink");
+			} else if (!blinking && this.blinked) {
+				this.blinked = false;
+			}
 		});
 
 		// Jaw clench presence is received
 		this.on("/elements/jaw_clench", (args) => {
 			let [clenching] = args;
-			if (clenching) this.emit("jaw clench");
+			if (clenching && !this.clenched) {
+				this.clenched = true;
+				this.emit("jaw clench");
+			} else if (!clenching && this.clenched) {
+				this.clenched = false;
+			}
 		});
 
 		this.udp.open();
