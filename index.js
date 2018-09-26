@@ -31,6 +31,9 @@ class Muse extends EventEmitter {
 		this.blinked = false;
 		this.clenched = false;
 
+		// Forehead contact tracker
+		this.touching = false;
+
 	}
 
 	start() {
@@ -117,6 +120,13 @@ class Muse extends EventEmitter {
 		this.on("/elements/touching_forehead", (args) => {
 			let [isTouching] = args;
 			this.emit("contact status", !!isTouching);
+			if (isTouching && !this.touching) {
+				this.touching = true;
+				this.emit("contact made");
+			} else if (!isTouching && this.touching) {
+				this.touching = false;
+				this.emit("contact lost");
+			}
 		});
 
 		// Sensor statuses are received
