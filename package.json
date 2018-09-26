@@ -1,9 +1,10 @@
 {
 	"name": "musedirect",
-	"version": "0.5.0",
+	"version": "0.6.0",
 	"description": "Provides an event-based interface to OSC data sent by Muse Direct",
 	"license": "MIT",
 	"repository": "github:majorcob/musedirect",
+	"main": "./lib/musedirect.js",
 	"dependencies": {
 		"osc": "^2.2.4"
 	}
