@@ -15,7 +15,7 @@ npm install musedirect --save
 const Muse = require("musedirect");
 
 // Create new instance listening at 127.0.0.1:7000
-let muse = new Muse("127.0.0.1", 7000);
+let muse = new Muse("", "127.0.0.1", 7000);
 
 // Create event listeners; see list of events below
 muse.on("open", () => {
@@ -40,7 +40,7 @@ As of Muse Direct on Windows version 0.19.1, the default OSC output uses message
 
 The `Muse` class extends `EventEmitter`. See [Node.js Events docs](https://nodejs.org/api/events.html#events_class_eventemitter) for inherited functionality.
 
-#### `new Muse(address="127.0.0.1", port=7000, prefix="")`
+#### `new Muse(prefix="", address="127.0.0.1", port=7000)`
 
 Constructor. In order to receive data, `.start()` must be called. `address` and `port` correspond to the UDP configuration in Muse Direct. `prefix` is the name that may be added by Muse Direct before each OSC address (see the note above regarding OSC paths).
 

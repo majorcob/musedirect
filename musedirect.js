@@ -5,15 +5,15 @@ const EventEmitter = require("events").EventEmitter;
 
 class Muse extends EventEmitter {
 
-	constructor(address="127.0.0.1", port=7000, prefix="") {
+	constructor(prefix="", address="127.0.0.1", port=7000) {
 
 		// Built-in EventEmitter stuff
 		super();
 
 		// UDP connection info
+		this.prefix = prefix;
 		this.address = address;
 		this.port = port;
-		this.prefix = prefix;
 		this.udp = new osc.UDPPort({
 			localAddress: this.address,
 			localPort: this.port
