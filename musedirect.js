@@ -150,6 +150,7 @@ class Muse extends EventEmitter {
 		// Blink presence is received
 		this.on("/elements/blink", (args) => {
 			let [blinking] = args;
+            this.emit("blink status", !!blinking);
 			if (blinking && !this.blinked) {
 				this.blinked = true;
 				this.emit("blink");
@@ -161,6 +162,7 @@ class Muse extends EventEmitter {
 		// Jaw clench presence is received
 		this.on("/elements/jaw_clench", (args) => {
 			let [clenching] = args;
+            this.emit("jaw clench status", !!clenching);
 			if (clenching && !this.clenched) {
 				this.clenched = true;
 				this.emit("jaw clench");
