@@ -32,9 +32,13 @@ As of Muse Direct on Windows version 0.19.1, the default OSC output uses message
 
 1. Change the name of the device to begin with a leading slash (e.g. `Person0` → `/Person0`), then pass the string `"/Person0"` as the `prefix` parameter to the `Muse` class constructor.
 
-2. Disable the default OSC output and create a new one. Set the prefix to a custom text value, which will be the `prefix` string passed to the `Muse` class constructor. This can be en empty string as well, which is the default value for `prefix.` If the prefix is not empty, then it must begin with a slash such that the resulting OSC paths also have a leading slash.
+2. Disable the default OSC output and create a new one. Set the prefix to a custom text value, which will be the `prefix` string passed to the `Muse` class constructor. This can be en empty string as well, which is the default value for `prefix`. If the prefix is not empty, then it must begin with a slash such that the resulting OSC paths also have a leading slash.
 
 ## API
+
+### Note about Muse SDK docs
+
+As of March 2019 [support for the Muse SDK has ceased](https://choosemuse.com/development/), meaning the links to the SDK docs throughout this readme are broken for the time being. Please see [this archived version of the SDK docs](https://web.archive.org/web/20180810185048/http://developer.choosemuse.com/tools/windows-tools/available-data-muse-direct).
 
 ### `Muse` class
 
